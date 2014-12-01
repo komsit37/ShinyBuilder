@@ -1,5 +1,19 @@
 $(document).ready(function () {
 
+dateTimeReviver = function (key, value) {
+    var a;
+    if (typeof value === 'string') {
+        a = /\/Date\((\d*)\)\//.exec(value);
+        if (a) {
+            //return new Date(+a[1]);
+            tzoffset = 60000*new Date().getTimezoneOffset();
+            return new Date(+a[1] + tzoffset);
+        }
+    }
+    return value;
+}
+
+
 //Google Chart Output Binding
 var googleChartOutputBinding = new Shiny.OutputBinding();
 $.extend(googleChartOutputBinding, {
@@ -16,7 +30,9 @@ $.extend(googleChartOutputBinding, {
       $.each(dataLabels, function(i, obj) {
         chartData.addColumn(obj, i);
       });
-      chartData.addRows(JSON.parse(data.dataJSON));
+      //console.log(data.dataJSON);
+      chartData.addRows(JSON.parse(data.dataJSON, dateTimeReviver));
+      //console.log(chartData);
       wrapper = new google.visualization.ChartWrapper({
             dataTable:    chartData,
             containerId:  $(el).attr('id'),
