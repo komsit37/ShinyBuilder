@@ -24,7 +24,7 @@ gvisFormat <- function(data){
   
   varTypes <- sapply(varNames,
                      function(.x){
-                       print(class(x[[.x]]))
+                       #print(class(x[[.x]]))
                        ifelse(is.numeric(x[[.x]]), 
                           "number",
                         ifelse(is.logical(x[[.x]]),
